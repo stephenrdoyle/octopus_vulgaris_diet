@@ -23,7 +23,7 @@ ggplot(data_2) +
 ggsave("prey_species_counts_heatmap.pdf", height=12, width=7)
 ggsave("prey_species_counts_heatmap.png")
 ```
-
+![](./04_analysis/prey_species_counts_heatmap.png)
 
 ```R
 library(tidyverse)
