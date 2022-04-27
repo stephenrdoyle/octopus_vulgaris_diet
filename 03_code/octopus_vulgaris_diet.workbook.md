@@ -20,7 +20,7 @@ ggplot(data_2) +
      labs(y="Prey species", x="Sampling location and conditions", fill="log10(read_count)")
 
 # save it
-ggsave("prey_species_counts_heatmap.pdf", height=12, width=7)
+ggsave("prey_species_counts_heatmap.pdf", height=12, width=8)
 ggsave("prey_species_counts_heatmap.png")
 ```
 ![](../04_analysis/prey_species_counts_heatmap.png)
@@ -46,3 +46,35 @@ plot_2 <- ggplot(data_2, aes(x=variable, y=log10(value+1), fill=Group)) +
      scale_fill_viridis_d(option="plasma")
 
 plot_1 + plot_2 + plot_layout(ncol=1, guides = 'collect')
+
+
+```
+
+
+```R
+library(tidyverse)
+library(reshape2)
+library(viridis)
+library(patchwork)
+library(ggrepel)
+
+data <- read.table("prey_per_sucker.txt", header=T, sep="\t")
+
+
+ggplot(data, aes(Suckers, Abundance, col=Species)) +
+     geom_line(size=1) +
+     geom_point() +
+     scale_colour_viridis(discrete=TRUE, option="plasma") +
+     theme_bw() + theme(legend.position="none") +
+     geom_text_repel(aes(label = Species),
+               data = data %>% group_by(Species) %>% filter(Suckers == max(Suckers)),
+               nudge_x = 0.5,
+               box.padding = 0.5, max.overlaps = Inf,
+               size = 4) +
+     scale_x_continuous(expand = expansion(mult = 0.3)) +
+     scale_y_continuous(expand = expansion(mult = 0.3)) +
+     labs() +
+     facet_grid(Location ~ .)
+
+
+```
